@@ -1,6 +1,3 @@
-[submodule "colors/vim-quantum"]
-	path = colors/vim-quantum
-	url = https://github.com/tyrannicaltoucan/vim-quantum.git
 [submodule "bundle/vim-quantum"]
 	path = bundle/vim-quantum
 	url = https://github.com/tyrannicaltoucan/vim-quantum.git

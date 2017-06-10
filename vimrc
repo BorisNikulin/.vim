@@ -17,6 +17,8 @@ Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'tpope/vim-fugitive' " git wrapper and needed by vim airline for git support
 
+Plugin 'Valloric/YouCompleteMe'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -44,6 +46,11 @@ let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
 
 set noshowmode "remove default insert status
+
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+set completeopt-=preview "disable preview window for completions
+
+
 
 set history=256
 
@@ -163,6 +170,10 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Open new splits at the bottom and right
+set splitbelow
+set splitright
+
 " Close the current buffer
 map <leader>bd :Bclose<cr>:tabclose<cr>gT
 
@@ -177,7 +188,7 @@ map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
-map <leader>t<leader> :tabnext
+map <leader>t<leader> :tabnext<cr>
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -203,7 +214,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 
 
-" needs to be 2 for the airline statusline 
+" needs to be 2 for the airline statusline
 set laststatus=2
 
 " Format the status line
@@ -290,3 +301,4 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+

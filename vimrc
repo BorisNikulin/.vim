@@ -12,6 +12,11 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
 
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+Plugin 'tpope/vim-fugitive' " git wrapper and needed by vim airline for git support
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -26,6 +31,19 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 
+
+" air-line
+let g:airline_powerline_fonts = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" air-line set theme solarizied dark
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+
+set noshowmode "remove default insert status
 
 set history=256
 
@@ -61,7 +79,7 @@ endif
 set ruler
 
 " Height of the command bar
-set cmdheight=2
+"set cmdheight=2
 
 " A buffer becomes hidden when it is abandoned
 set hid
@@ -104,8 +122,6 @@ set foldcolumn=1
 
 " Enable syntax highlighting
 syntax enable
-
-set guifont=Consolas\ Regular:14
 
 set number
 
@@ -187,22 +203,24 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 
 
-" Always show the status line
-set laststatus=1
+" needs to be 2 for the airline statusline 
+set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+
+"let g:airline#extensions#tabline#enabled = 1
 
 
 
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
-" Move a line of text using CTRL+[jk]
-nmap <c-j> mz:m+<cr>`z
-nmap <c-k> mz:m-2<cr>`z
-vmap <c-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <c-k> :m'<-2<cr>`>my`<mzgv`yo`z
+" Move a line of text using ALT+[jk] (alt doesnt work)
+"nmap <M-k> mz:m-2<cr>`z
+"nmap <M-j> mz:m+<cr>`z
+""vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+"vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()

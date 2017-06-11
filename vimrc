@@ -54,14 +54,15 @@ set noshowmode "remove default insert status
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 set completeopt-=preview "disable preview window for completions
 
-let b:csv_arrange_align='.*'
-aug CSV_Editing
-	au!
-	au BufRead,BufWritePost *.csv :%ArrangeColumn
-	au BufWritePre *.csv :%UnArrangeColumn
-aug end
- 
+let vimrplugin_assign = 0 " disable shift + _ = type' <-'
 
+let b:csv_arrange_align='.*'
+let g:csv_autocmd_arrange=1
+
+
+
+set timeoutlen=100
+set ttimeoutlen=100
 
 set history=256
 

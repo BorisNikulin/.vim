@@ -23,6 +23,8 @@ Plugin 'jalvesaq/Nvim-R'
 
 Plugin 'chrisbra/csv.vim'
 
+Plugin 'ctrlpvim/ctrlp.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -58,6 +60,28 @@ let R_assign=0  " disable _ = type' <-'
 
 let b:csv_arrange_align='.*'
 let g:csv_autocmd_arrange=1
+
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|swap)$',
+\}
+
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+
+" Use a leader instead of the actual named binding
+"nmap <leader>p :CtrlP<cr> (does not work (idk))
+
+" Easy bindings for its various modes
+nmap B :CtrlPBuffer<cr>
+nmap R :CtrlPMRU<cr>
+nmap F :CtrlPCurWD<cr>
+nmap M :CtrlPMixed<cr>
+nmap gl :CtrlPLine<cr>
+nmap gc :CtrlPChange<cr>
 
 
 

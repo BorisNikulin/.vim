@@ -19,6 +19,10 @@ Plugin 'tpope/vim-fugitive' " git wrapper and needed by vim airline for git supp
 
 Plugin 'Valloric/YouCompleteMe'
 
+Plugin 'jalvesaq/Nvim-R'
+
+Plugin 'chrisbra/csv.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -47,9 +51,16 @@ let g:airline_solarized_bg='dark'
 
 set noshowmode "remove default insert status
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 set completeopt-=preview "disable preview window for completions
 
+let b:csv_arrange_align='.*'
+aug CSV_Editing
+	au!
+	au BufRead,BufWritePost *.csv :%ArrangeColumn
+	au BufWritePre *.csv :%UnArrangeColumn
+aug end
+ 
 
 
 set history=256

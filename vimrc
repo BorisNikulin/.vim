@@ -25,6 +25,8 @@ Plugin 'chrisbra/csv.vim'
 
 Plugin 'ctrlpvim/ctrlp.vim'
 
+Plugin 'easymotion/vim-easymotion'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -37,6 +39,11 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
+
+
+let mapleader=" "
+let g:mapleader=" " 
 
 
 
@@ -54,6 +61,10 @@ let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
 
 set noshowmode "remove default insert status
+
+set diffopt+=vertical
+nmap <leader>gs :Gstatus<cr>:on<cr>
+nmap <leader>gd :Gdiff<cr>
 
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 set completeopt-=preview "disable preview window for completions
@@ -75,15 +86,21 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_working_path_mode = 'r'
 
 " Use a leader instead of the actual named binding
-"nmap <leader>p :CtrlP<cr> (does not work (idk))
+nmap <leader>p :CtrlP<cr> (does not work (idk))
 
 " Easy bindings for its various modes
-nmap B :CtrlPBuffer<cr>
-nmap R :CtrlPMRU<cr>
-nmap F :CtrlPCurWD<cr>
-nmap M :CtrlPMixed<cr>
-nmap gl :CtrlPLine<cr>
-nmap gc :CtrlPChange<cr>
+nmap <leader>gb :CtrlPBuffer<cr>
+nmap <leader>gr :CtrlPMRU<cr>
+nmap <leader>gf :CtrlPCurWD<cr>
+nmap <leader>gm :CtrlPMixed<cr>
+nmap <leader>gl :CtrlPLine<cr>
+nmap <leader>gc :CtrlPChange<cr>
+
+" easymotion highlight colors
+hi link EasyMotionTarget SpecialChar
+hi link EasyMotionTarget2First SpecialChar
+hi link EasyMotionTarget2Second SpecialChar
+hi link EasyMotionShade Comment
 
 
 
@@ -95,8 +112,7 @@ set history=256
 "Reload with external changes
 set autoread
 
-let mapleader=" "
-let g:mapleader=" "
+
 
 "Fast save
 nmap <leader>w :w!<cr>

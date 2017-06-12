@@ -47,6 +47,8 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
+let g:airline#extensions#tabline#enabled = 1
+
 " air-line set theme solarizied dark
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
@@ -256,8 +258,6 @@ set laststatus=2
 
 " Format the status line
 "set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
-"let g:airline#extensions#tabline#enabled = 1
 
 
 

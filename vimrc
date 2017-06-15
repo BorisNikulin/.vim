@@ -67,6 +67,7 @@ set noshowmode "remove default insert status
 set diffopt+=vertical
 nmap <leader>gs :Gstatus<cr>:on<cr>
 nmap <leader>gd :Gdiff<cr>
+nmap <leader>gp :Gpush<cr> 
 
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 set completeopt-=preview "disable preview window for completions

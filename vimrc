@@ -85,7 +85,9 @@ let g:ctrlp_custom_ignore = {
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
 " control. It also supports works with .svn, .hg, .bzr.
-let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_working_path_mode = 'ra'
+" Shows hidden files
+let g:ctrlp_show_hidden = 1
 
 " Use a leader instead of the actual named binding
 nmap <leader>p :CtrlP<cr> (does not work (idk))

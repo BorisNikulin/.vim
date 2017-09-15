@@ -29,6 +29,10 @@ Plugin 'easymotion/vim-easymotion'
 
 Plugin 'scrooloose/nerdcommenter'
 
+Plugin 'jiangmiao/auto-pairs'
+
+Plugin 'lervag/vimtex'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -67,10 +71,12 @@ set noshowmode "remove default insert status
 set diffopt+=vertical
 nmap <leader>gs :Gstatus<cr>:on<cr>
 nmap <leader>gd :Gdiff<cr>
-nmap <leader>gp :Gpush<cr> 
+nmap <leader>gp :Gpush<cr>
 
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 set completeopt-=preview "disable preview window for completions
+
+let g:EclimCompletionMethod = 'omnifunc'
 
 let R_assign=0  " disable _ = type' <-'
 
@@ -79,7 +85,7 @@ let g:csv_autocmd_arrange=1
 
 " Setup some default ignores
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'dir':  '\v[\/](\.(git|hg|svn|gradle)|\_site)$',
   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|swap)$',
 \}
 
@@ -107,7 +113,8 @@ hi link EasyMotionTarget2First SpecialChar
 hi link EasyMotionTarget2Second SpecialChar
 hi link EasyMotionShade Comment
 
-
+" set .tex to latex not plaintex
+let g:tex_flavor = 'latex'
 
 set timeoutlen=100
 set ttimeoutlen=100

@@ -113,8 +113,11 @@ hi link EasyMotionTarget2First SpecialChar
 hi link EasyMotionTarget2Second SpecialChar
 hi link EasyMotionShade Comment
 
-" set .tex to latex not plaintex
+" set .tex to tex (latex) not plaintex
 let g:tex_flavor = 'latex'
+
+autocmd FileType gitcommit setlocal spell
+autocmd FileType tex setlocal spell
 
 set timeoutlen=100
 set ttimeoutlen=100

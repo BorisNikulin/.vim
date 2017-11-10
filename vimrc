@@ -57,7 +57,7 @@ let g:mapleader=" "
 let g:airline_powerline_fonts = 1
 
 if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
+	let g:airline_symbols = {}
 endif
 
 let g:airline#extensions#tabline#enabled = 1
@@ -67,6 +67,16 @@ let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
 
 set noshowmode "remove default insert status
+
+" spaces are allowed after tabs, but not in between
+" this algorithm works well with programming styles that use tabs for
+" indentation and spaces for alignment
+let g:airline#extensions#whitespace#mixed_indent_algo = 2
+
+augroup rmarkdown
+	au!
+	au FileType rmd let b:airline_whitespace_checks = ['indent', 'trailing', 'long']
+augroup END
 
 set diffopt+=vertical
 nmap <leader>gs :Gstatus<cr>:on<cr>
@@ -85,9 +95,9 @@ let g:csv_autocmd_arrange=1
 
 " Setup some default ignores
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn|gradle)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|swap)$',
-\}
+	\ 'dir':  '\v[\/](\.(git|hg|svn|gradle)|\_site)$',
+	\ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|swap)$',
+	\}
 
 " Use the nearest .git directory as the cwd
 " This makes a lot of sense if you are working on a project that is in version
@@ -116,8 +126,16 @@ hi link EasyMotionShade Comment
 " set .tex to tex (latex) not plaintex
 let g:tex_flavor = 'latex'
 
-autocmd FileType gitcommit setlocal spell
-autocmd FileType tex setlocal spell
+" TODO figure out Synctex with vimtex and okular pdf viewer
+"let g:vimtex_view_general_viewer = 'okular'
+"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+"let g:vimtex_view_general_options_latexmk = '--unique'
+
+augroup spellcheck
+	autocmd!
+	autocmd FileType gitcommit setlocal spell
+	autocmd FileType tex setlocal spell
+augroup END
 
 set timeoutlen=100
 set ttimeoutlen=100
@@ -145,9 +163,9 @@ set wildmenu
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
 if has("win16") || has("win32")
-    set wildignore+=.git\*,.hg\*,.svn\*
+	set wildignore+=.git\*,.hg\*,.svn\*
 else
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
 
@@ -199,6 +217,8 @@ set foldcolumn=1
 " Enable syntax highlighting
 syntax enable
 
+let g:markdown_fenced_languages = ['r', 'cpp', 'c', 'js=javascript']
+
 set number
 
 set showcmd
@@ -206,12 +226,22 @@ set showcmd
 set background=dark
 colorscheme solarized
 
+set list
+hi SpecialKey ctermbg=None ctermfg=5
+
+augroup haskell
+	au!
+	au BufNewFile,BufRead * :set listchars=tab:\ \ ,trail:&,extends:>
+	au BufNewFile,BufRead *.hs :set listchars=tab:.\ ,trail:&,extends:>
+augroup END
+
+
 " Set extra options when running in GUI mode
 if has("gui_running")
-    set guioptions-=T
-    set guioptions-=e
-    set t_Co=256
-    set guitablabel=%M\ %t
+	set guioptions-=T
+	set guioptions-=e
+	set t_Co=256
+	set guitablabel=%M\ %t
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
@@ -274,8 +304,8 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Specify the behavior when switching between buffers
 try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
+	set switchbuf=useopen,usetab,newtab
+	set stal=2
 catch
 endtry
 
@@ -292,9 +322,9 @@ set laststatus=2
 
 " show cursor line only in active window
 augroup CursorLine
-  au!
-  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  au WinLeave * setlocal nocursorline
+	au!
+	au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+	au WinLeave * setlocal nocursorline
 augroup END
 
 
@@ -310,15 +340,15 @@ map 0 ^
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    silent! %s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
+	let save_cursor = getpos(".")
+	let old_query = getreg('/')
+	silent! %s/\s\+$//e
+	call setpos('.', save_cursor)
+	call setreg('/', old_query)
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+	autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
 endif
 
 
@@ -331,6 +361,7 @@ map <leader>sn ]s
 map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
+map <leader>sc 1z=
 
 
 
@@ -350,30 +381,30 @@ map <leader>pp :setlocal paste!<cr>
 
 " Returns true if paste mode is enabled
 function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    endif
-    return ''
+	if &paste
+		return 'PASTE MODE  '
+	endif
+	return ''
 endfunction
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
+	let l:currentBufNum = bufnr("%")
+	let l:alternateBufNum = bufnr("#")
 
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
-   endif
+	if buflisted(l:alternateBufNum)
+		buffer #
+	else
+		bnext
+	endif
 
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
+	if bufnr("%") == l:currentBufNum
+		new
+	endif
 
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
+	if buflisted(l:currentBufNum)
+		execute("bdelete! ".l:currentBufNum)
+	endif
 endfunction
 

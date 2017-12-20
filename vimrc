@@ -236,6 +236,9 @@ augroup haskell
 augroup END
 
 
+"enable mouse support
+set mouse=a
+
 " Set extra options when running in GUI mode
 if has("gui_running")
 	set guioptions-=T
@@ -274,7 +277,7 @@ set splitbelow
 set splitright
 
 " Close the current buffer
-map <leader>bd :Bclose<cr>:tabclose<cr>gT
+map <leader>bd :Bclose<cr>
 
 " Close all the buffers
 map <leader>ba :bufdo bd<cr>

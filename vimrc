@@ -1,7 +1,7 @@
 ""Based on https://github.com/amix/vimrc
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible			  " be iMproved, required
+filetype off				  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -12,14 +12,20 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
 
+" Load before powerline to dynamically load python3 instead of python2
+" only 1 can be dynamically loaded
+" powerline is probably loaded in by airline or airline themes
+Plugin 'Valloric/YouCompleteMe'
+
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'tpope/vim-fugitive' " git wrapper and needed by vim airline for git support
 
-Plugin 'Valloric/YouCompleteMe'
-
 Plugin 'jalvesaq/Nvim-R'
+
+Plugin 'plytophogy/vim-virtualenv'
+Plugin 'PieterjanMontens/vim-pipenv'
 
 Plugin 'chrisbra/csv.vim'
 
@@ -32,16 +38,24 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
 
 Plugin 'lervag/vimtex'
+Plugin 'KeitaNakamura/tex-conceal.vim'
+
+Plugin 'aklt/plantuml-syntax'
+
+Plugin 'edwinb/idris2-vim'
+
+Plugin 'purescript-contrib/purescript-vim'
+Plugin 'FrigoEU/psc-ide-vim'
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call vundle#end()			 " required
+filetype plugin indent on	 " required
 
 " Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginList		- lists configured plugins
+" :PluginInstall	- installs plugins; append `!` to update or just :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+" :PluginClean		- confirms removal of unused plugins; append `!` to auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
@@ -83,19 +97,21 @@ nmap <leader>gs :Gstatus<cr>:on<cr>
 nmap <leader>gd :Gdiff<cr>
 nmap <leader>gp :Gpush<cr>
 
-let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_extra_conf_globlist = ['~/school/*']
 set completeopt-=preview "disable preview window for completions
+let g:ycm_key_list_stop_completion = ['<C-e>']
 
 let g:EclimCompletionMethod = 'omnifunc'
 
-let R_assign=0  " disable _ = type' <-'
+let R_assign=0	" disable _ = type' <-'
 
 let b:csv_arrange_align='.*'
 let g:csv_autocmd_arrange=1
 
 " Setup some default ignores
 let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/](\.(git|hg|svn|gradle)|\_site)$',
+	\ 'dir':  '\v[\/](\.(git|hg|svn|gradle|stack-work)|\_site)$',
 	\ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|swap)$',
 	\}
 
@@ -107,7 +123,7 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_show_hidden = 1
 
 " Use a leader instead of the actual named binding
-nmap <leader>p :CtrlP<cr> (does not work (idk))
+nmap <leader>p :CtrlP<cr>
 
 " Easy bindings for its various modes
 nmap <leader>gb :CtrlPBuffer<cr>
@@ -123,18 +139,44 @@ hi link EasyMotionTarget2First SpecialChar
 hi link EasyMotionTarget2Second SpecialChar
 hi link EasyMotionShade Comment
 
+" auto pairs
+let g:AutoPairs = {'{':'}'}
+
 " set .tex to tex (latex) not plaintex
 let g:tex_flavor = 'latex'
 
-" TODO figure out Synctex with vimtex and okular pdf viewer
+"set conceallevel=2
+"let g:tex_conceal="abdgm"
+
+let g:vimtex_view_method = 'zathura'
 "let g:vimtex_view_general_viewer = 'okular'
 "let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 "let g:vimtex_view_general_options_latexmk = '--unique'
+
+" Enable YouCompleteMe with VimTex
+if !exists('g:ycm_semantic_triggers')
+	let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+
+let $JAVA_TOOL_OPTIONS = '-javaagent:/home/main/.vim/lombok.jar -Xbootclasspath/a:/home/main/.vim/lombok.jar'
+
+noremap <leader>f :YcmCompleter FixIt<CR>
+noremap <leader>o :YcmCompleter OrganizeImports<CR>
+noremap <leader>d :YcmCompleter GetDoc<CR>
+noremap <leader>e :YcmDiag<CR>
+noremap <leader>E :YcmShowDetailedDiagnostics<CR>
 
 augroup spellcheck
 	autocmd!
 	autocmd FileType gitcommit setlocal spell
 	autocmd FileType tex setlocal spell
+	autocmd FileType markdown setlocal spell
+	autocmd FileType rmarkdown setlocal spell
+augroup END
+
+augroup cabal
+	autocmd FileType cabal setlocal expandtab
 augroup END
 
 set timeoutlen=100
@@ -176,7 +218,7 @@ set ruler
 "set cmdheight=2
 
 " A buffer becomes hidden when it is abandoned
-set hid
+set hidden
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -217,7 +259,25 @@ set foldcolumn=1
 " Enable syntax highlighting
 syntax enable
 
-let g:markdown_fenced_languages = ['r', 'cpp', 'c', 'js=javascript']
+let g:markdown_fenced_languages = [
+		\ 'vim',
+		\  'css',
+		\  'erb=eruby',
+		\  'go',
+		\  'java',
+		\  'javascript',
+		\  'js=javascript',
+		\  'json=javascript',
+		\  'ruby',
+		\  'sass',
+		\  'sql',
+		\  'xml',
+		\  'cpp',
+		\  'python',
+		\  'bash=sh',
+		\  'cmake',
+		\  'html'
+		\]
 
 set number
 
@@ -225,15 +285,20 @@ set showcmd
 
 set background=dark
 colorscheme solarized
+" remove underline on line number
+hi CursorLineNr term=bold cterm=bold ctermfg=012 gui=bold
 
 set list
 hi SpecialKey ctermbg=None ctermfg=5
+hi SpellBad cterm=underline
 
-augroup haskell
-	au!
-	au BufNewFile,BufRead * :set listchars=tab:\ \ ,trail:&,extends:>
-	au BufNewFile,BufRead *.hs :set listchars=tab:.\ ,trail:&,extends:>
-augroup END
+set listchars=tab:\▏\ ,trail:●,extends:►
+
+"augroup haskell
+	"au!
+	"au BufEnter *	 :set listchars=tab:\ \ ,trail:●,extends:►
+	"au BufEnter *.hs :set listchars=tab:\▏\ ,trail:●,extends:►
+"augroup END
 
 
 "enable mouse support
@@ -366,6 +431,9 @@ map <leader>sa zg
 map <leader>s? z=
 map <leader>sc 1z=
 
+" Change last typo to first suggestion
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
 
 
 " Quickly open a buffer for scribble
@@ -379,13 +447,10 @@ map <leader>pp :setlocal paste!<cr>
 
 
 
-
-
-
 " Returns true if paste mode is enabled
 function! HasPaste()
 	if &paste
-		return 'PASTE MODE  '
+		return 'PASTE MODE	'
 	endif
 	return ''
 endfunction
@@ -411,3 +476,10 @@ function! <SID>BufcloseCloseIt()
 	endif
 endfunction
 
+
+
+" directory specific settings
+augroup local-features
+	au!
+	au BufRead */local-features* set expandtab
+augroup END
